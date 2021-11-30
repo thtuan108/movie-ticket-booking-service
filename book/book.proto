@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option go_package = "movie-ticket-booking/book";
+
+package book;
+
+service Booker {
+	rpc ListMovie(NoParam) returns (stream Options) {}
+	rpc ListGenres(NoParam) returns (stream Options) {}
+	rpc ListShowTimes(NoParam) returns (stream Options) {}
+	rpc MoviesByTitle(QueryParam) returns (stream Movie) {}
+	rpc MoviesByGenre(QueryParam) returns (stream Movie) {}
+	rpc MoviesByTime(QueryParam) returns (stream Movie) {}
+	rpc BuyTicket(BuyRequest) returns (NoParam) {}
+}
+
+message NoParam {}
+
+message Options {
+	string option = 2;
+}
+
+message QueryParam {
+	string param = 1;
+}
+
+message Movie {
+	string title = 1;
+	string genre = 2;
+	int64 year = 3;
+	string showTime = 4;
+	int64 room = 5;
+	int64 ticketsLeft = 6;
+}
+
+message BuyRequest {
+	Movie movie = 1;
+	int64 amount = 2;
+}
