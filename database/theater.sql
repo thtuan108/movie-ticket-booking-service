@@ -42,6 +42,31 @@ INSERT INTO `movies` VALUES ('J19','Jumanji','Adventure',2019),('S20','Soul','Ca
 UNLOCK TABLES;
 
 --
+-- Table structure for table `rooms`
+--
+
+DROP TABLE IF EXISTS `rooms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rooms` (
+  `id` int NOT NULL,
+  `class` varchar(10) DEFAULT NULL,
+  `seats` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rooms`
+--
+
+LOCK TABLES `rooms` WRITE;
+/*!40000 ALTER TABLE `rooms` DISABLE KEYS */;
+INSERT INTO `rooms` VALUES (1,'Standard',150),(2,'IMAX',120),(3,'4DX',100);
+/*!40000 ALTER TABLE `rooms` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `schedule`
 --
 
@@ -52,12 +77,12 @@ CREATE TABLE `schedule` (
   `show_time` time NOT NULL,
   `movie_id` varchar(5) NOT NULL,
   `room` int DEFAULT NULL,
-  `tickets` int DEFAULT '100',
   `tickets_sold` int DEFAULT NULL,
   PRIMARY KEY (`show_time`,`movie_id`),
   KEY `movie_id` (`movie_id`),
+  KEY `room` (`room`),
   CONSTRAINT `schedule_ibfk_1` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`id`),
-  CONSTRAINT `schedule_chk_1` CHECK ((`tickets_sold` <= `tickets`))
+  CONSTRAINT `schedule_ibfk_2` FOREIGN KEY (`room`) REFERENCES `rooms` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -67,7 +92,7 @@ CREATE TABLE `schedule` (
 
 LOCK TABLES `schedule` WRITE;
 /*!40000 ALTER TABLE `schedule` DISABLE KEYS */;
-INSERT INTO `schedule` VALUES ('09:30:00','S20',2,100,80),('09:30:00','SC21',3,100,79),('09:30:00','TN04',1,100,78),('12:45:00','J19',2,100,73),('12:45:00','SM19',1,100,85),('12:45:00','TN04',3,100,83),('16:15:00','S20',1,100,72),('16:15:00','SC21',2,100,68),('16:15:00','SM19',3,100,76),('20:30:00','J19',1,100,87),('20:30:00','SM19',3,100,90),('20:30:00','TN04',2,100,92);
+INSERT INTO `schedule` VALUES ('09:30:00','S20',2,84),('09:30:00','SC21',3,80),('09:30:00','TN04',1,78),('12:45:00','J19',2,39),('12:45:00','SM19',1,85),('12:45:00','TN04',3,83),('16:15:00','S20',1,72),('16:15:00','SC21',2,71),('16:15:00','SM19',3,76),('20:30:00','J19',1,88),('20:30:00','SM19',3,90),('20:30:00','TN04',2,87);
 /*!40000 ALTER TABLE `schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -80,4 +105,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-30 19:46:54
+-- Dump completed on 2021-12-19 14:29:04

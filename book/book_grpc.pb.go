@@ -18,12 +18,12 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BookerClient interface {
-	ListMovie(ctx context.Context, in *NoParam, opts ...grpc.CallOption) (Booker_ListMovieClient, error)
-	ListGenres(ctx context.Context, in *NoParam, opts ...grpc.CallOption) (Booker_ListGenresClient, error)
-	ListShowTimes(ctx context.Context, in *NoParam, opts ...grpc.CallOption) (Booker_ListShowTimesClient, error)
-	MoviesByTitle(ctx context.Context, in *QueryParam, opts ...grpc.CallOption) (Booker_MoviesByTitleClient, error)
-	MoviesByGenre(ctx context.Context, in *QueryParam, opts ...grpc.CallOption) (Booker_MoviesByGenreClient, error)
-	MoviesByTime(ctx context.Context, in *QueryParam, opts ...grpc.CallOption) (Booker_MoviesByTimeClient, error)
+	ListMovie(ctx context.Context, in *NoParam, opts ...grpc.CallOption) (*Options, error)
+	ListGenres(ctx context.Context, in *NoParam, opts ...grpc.CallOption) (*Options, error)
+	ListShowTimes(ctx context.Context, in *NoParam, opts ...grpc.CallOption) (*Options, error)
+	MoviesByTitle(ctx context.Context, in *QueryParam, opts ...grpc.CallOption) (*Movies, error)
+	MoviesByGenre(ctx context.Context, in *QueryParam, opts ...grpc.CallOption) (*Movies, error)
+	MoviesByTime(ctx context.Context, in *QueryParam, opts ...grpc.CallOption) (*Movies, error)
 	BuyTicket(ctx context.Context, in *BuyRequest, opts ...grpc.CallOption) (*NoParam, error)
 }
 
@@ -35,196 +35,58 @@ func NewBookerClient(cc grpc.ClientConnInterface) BookerClient {
 	return &bookerClient{cc}
 }
 
-func (c *bookerClient) ListMovie(ctx context.Context, in *NoParam, opts ...grpc.CallOption) (Booker_ListMovieClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Booker_ServiceDesc.Streams[0], "/book.Booker/ListMovie", opts...)
+func (c *bookerClient) ListMovie(ctx context.Context, in *NoParam, opts ...grpc.CallOption) (*Options, error) {
+	out := new(Options)
+	err := c.cc.Invoke(ctx, "/book.Booker/ListMovie", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &bookerListMovieClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
+	return out, nil
 }
 
-type Booker_ListMovieClient interface {
-	Recv() (*Options, error)
-	grpc.ClientStream
-}
-
-type bookerListMovieClient struct {
-	grpc.ClientStream
-}
-
-func (x *bookerListMovieClient) Recv() (*Options, error) {
-	m := new(Options)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *bookerClient) ListGenres(ctx context.Context, in *NoParam, opts ...grpc.CallOption) (Booker_ListGenresClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Booker_ServiceDesc.Streams[1], "/book.Booker/ListGenres", opts...)
+func (c *bookerClient) ListGenres(ctx context.Context, in *NoParam, opts ...grpc.CallOption) (*Options, error) {
+	out := new(Options)
+	err := c.cc.Invoke(ctx, "/book.Booker/ListGenres", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &bookerListGenresClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
+	return out, nil
 }
 
-type Booker_ListGenresClient interface {
-	Recv() (*Options, error)
-	grpc.ClientStream
-}
-
-type bookerListGenresClient struct {
-	grpc.ClientStream
-}
-
-func (x *bookerListGenresClient) Recv() (*Options, error) {
-	m := new(Options)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *bookerClient) ListShowTimes(ctx context.Context, in *NoParam, opts ...grpc.CallOption) (Booker_ListShowTimesClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Booker_ServiceDesc.Streams[2], "/book.Booker/ListShowTimes", opts...)
+func (c *bookerClient) ListShowTimes(ctx context.Context, in *NoParam, opts ...grpc.CallOption) (*Options, error) {
+	out := new(Options)
+	err := c.cc.Invoke(ctx, "/book.Booker/ListShowTimes", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &bookerListShowTimesClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
+	return out, nil
 }
 
-type Booker_ListShowTimesClient interface {
-	Recv() (*Options, error)
-	grpc.ClientStream
-}
-
-type bookerListShowTimesClient struct {
-	grpc.ClientStream
-}
-
-func (x *bookerListShowTimesClient) Recv() (*Options, error) {
-	m := new(Options)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *bookerClient) MoviesByTitle(ctx context.Context, in *QueryParam, opts ...grpc.CallOption) (Booker_MoviesByTitleClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Booker_ServiceDesc.Streams[3], "/book.Booker/MoviesByTitle", opts...)
+func (c *bookerClient) MoviesByTitle(ctx context.Context, in *QueryParam, opts ...grpc.CallOption) (*Movies, error) {
+	out := new(Movies)
+	err := c.cc.Invoke(ctx, "/book.Booker/MoviesByTitle", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &bookerMoviesByTitleClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
+	return out, nil
 }
 
-type Booker_MoviesByTitleClient interface {
-	Recv() (*Movie, error)
-	grpc.ClientStream
-}
-
-type bookerMoviesByTitleClient struct {
-	grpc.ClientStream
-}
-
-func (x *bookerMoviesByTitleClient) Recv() (*Movie, error) {
-	m := new(Movie)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *bookerClient) MoviesByGenre(ctx context.Context, in *QueryParam, opts ...grpc.CallOption) (Booker_MoviesByGenreClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Booker_ServiceDesc.Streams[4], "/book.Booker/MoviesByGenre", opts...)
+func (c *bookerClient) MoviesByGenre(ctx context.Context, in *QueryParam, opts ...grpc.CallOption) (*Movies, error) {
+	out := new(Movies)
+	err := c.cc.Invoke(ctx, "/book.Booker/MoviesByGenre", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &bookerMoviesByGenreClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
+	return out, nil
 }
 
-type Booker_MoviesByGenreClient interface {
-	Recv() (*Movie, error)
-	grpc.ClientStream
-}
-
-type bookerMoviesByGenreClient struct {
-	grpc.ClientStream
-}
-
-func (x *bookerMoviesByGenreClient) Recv() (*Movie, error) {
-	m := new(Movie)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *bookerClient) MoviesByTime(ctx context.Context, in *QueryParam, opts ...grpc.CallOption) (Booker_MoviesByTimeClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Booker_ServiceDesc.Streams[5], "/book.Booker/MoviesByTime", opts...)
+func (c *bookerClient) MoviesByTime(ctx context.Context, in *QueryParam, opts ...grpc.CallOption) (*Movies, error) {
+	out := new(Movies)
+	err := c.cc.Invoke(ctx, "/book.Booker/MoviesByTime", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &bookerMoviesByTimeClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type Booker_MoviesByTimeClient interface {
-	Recv() (*Movie, error)
-	grpc.ClientStream
-}
-
-type bookerMoviesByTimeClient struct {
-	grpc.ClientStream
-}
-
-func (x *bookerMoviesByTimeClient) Recv() (*Movie, error) {
-	m := new(Movie)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
+	return out, nil
 }
 
 func (c *bookerClient) BuyTicket(ctx context.Context, in *BuyRequest, opts ...grpc.CallOption) (*NoParam, error) {
@@ -240,12 +102,12 @@ func (c *bookerClient) BuyTicket(ctx context.Context, in *BuyRequest, opts ...gr
 // All implementations must embed UnimplementedBookerServer
 // for forward compatibility
 type BookerServer interface {
-	ListMovie(*NoParam, Booker_ListMovieServer) error
-	ListGenres(*NoParam, Booker_ListGenresServer) error
-	ListShowTimes(*NoParam, Booker_ListShowTimesServer) error
-	MoviesByTitle(*QueryParam, Booker_MoviesByTitleServer) error
-	MoviesByGenre(*QueryParam, Booker_MoviesByGenreServer) error
-	MoviesByTime(*QueryParam, Booker_MoviesByTimeServer) error
+	ListMovie(context.Context, *NoParam) (*Options, error)
+	ListGenres(context.Context, *NoParam) (*Options, error)
+	ListShowTimes(context.Context, *NoParam) (*Options, error)
+	MoviesByTitle(context.Context, *QueryParam) (*Movies, error)
+	MoviesByGenre(context.Context, *QueryParam) (*Movies, error)
+	MoviesByTime(context.Context, *QueryParam) (*Movies, error)
 	BuyTicket(context.Context, *BuyRequest) (*NoParam, error)
 	mustEmbedUnimplementedBookerServer()
 }
@@ -254,23 +116,23 @@ type BookerServer interface {
 type UnimplementedBookerServer struct {
 }
 
-func (UnimplementedBookerServer) ListMovie(*NoParam, Booker_ListMovieServer) error {
-	return status.Errorf(codes.Unimplemented, "method ListMovie not implemented")
+func (UnimplementedBookerServer) ListMovie(context.Context, *NoParam) (*Options, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListMovie not implemented")
 }
-func (UnimplementedBookerServer) ListGenres(*NoParam, Booker_ListGenresServer) error {
-	return status.Errorf(codes.Unimplemented, "method ListGenres not implemented")
+func (UnimplementedBookerServer) ListGenres(context.Context, *NoParam) (*Options, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListGenres not implemented")
 }
-func (UnimplementedBookerServer) ListShowTimes(*NoParam, Booker_ListShowTimesServer) error {
-	return status.Errorf(codes.Unimplemented, "method ListShowTimes not implemented")
+func (UnimplementedBookerServer) ListShowTimes(context.Context, *NoParam) (*Options, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListShowTimes not implemented")
 }
-func (UnimplementedBookerServer) MoviesByTitle(*QueryParam, Booker_MoviesByTitleServer) error {
-	return status.Errorf(codes.Unimplemented, "method MoviesByTitle not implemented")
+func (UnimplementedBookerServer) MoviesByTitle(context.Context, *QueryParam) (*Movies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MoviesByTitle not implemented")
 }
-func (UnimplementedBookerServer) MoviesByGenre(*QueryParam, Booker_MoviesByGenreServer) error {
-	return status.Errorf(codes.Unimplemented, "method MoviesByGenre not implemented")
+func (UnimplementedBookerServer) MoviesByGenre(context.Context, *QueryParam) (*Movies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MoviesByGenre not implemented")
 }
-func (UnimplementedBookerServer) MoviesByTime(*QueryParam, Booker_MoviesByTimeServer) error {
-	return status.Errorf(codes.Unimplemented, "method MoviesByTime not implemented")
+func (UnimplementedBookerServer) MoviesByTime(context.Context, *QueryParam) (*Movies, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MoviesByTime not implemented")
 }
 func (UnimplementedBookerServer) BuyTicket(context.Context, *BuyRequest) (*NoParam, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BuyTicket not implemented")
@@ -288,130 +150,112 @@ func RegisterBookerServer(s grpc.ServiceRegistrar, srv BookerServer) {
 	s.RegisterService(&Booker_ServiceDesc, srv)
 }
 
-func _Booker_ListMovie_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(NoParam)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+func _Booker_ListMovie_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NoParam)
+	if err := dec(in); err != nil {
+		return nil, err
 	}
-	return srv.(BookerServer).ListMovie(m, &bookerListMovieServer{stream})
-}
-
-type Booker_ListMovieServer interface {
-	Send(*Options) error
-	grpc.ServerStream
-}
-
-type bookerListMovieServer struct {
-	grpc.ServerStream
-}
-
-func (x *bookerListMovieServer) Send(m *Options) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func _Booker_ListGenres_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(NoParam)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+	if interceptor == nil {
+		return srv.(BookerServer).ListMovie(ctx, in)
 	}
-	return srv.(BookerServer).ListGenres(m, &bookerListGenresServer{stream})
-}
-
-type Booker_ListGenresServer interface {
-	Send(*Options) error
-	grpc.ServerStream
-}
-
-type bookerListGenresServer struct {
-	grpc.ServerStream
-}
-
-func (x *bookerListGenresServer) Send(m *Options) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func _Booker_ListShowTimes_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(NoParam)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/book.Booker/ListMovie",
 	}
-	return srv.(BookerServer).ListShowTimes(m, &bookerListShowTimesServer{stream})
-}
-
-type Booker_ListShowTimesServer interface {
-	Send(*Options) error
-	grpc.ServerStream
-}
-
-type bookerListShowTimesServer struct {
-	grpc.ServerStream
-}
-
-func (x *bookerListShowTimesServer) Send(m *Options) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func _Booker_MoviesByTitle_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(QueryParam)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BookerServer).ListMovie(ctx, req.(*NoParam))
 	}
-	return srv.(BookerServer).MoviesByTitle(m, &bookerMoviesByTitleServer{stream})
+	return interceptor(ctx, in, info, handler)
 }
 
-type Booker_MoviesByTitleServer interface {
-	Send(*Movie) error
-	grpc.ServerStream
-}
-
-type bookerMoviesByTitleServer struct {
-	grpc.ServerStream
-}
-
-func (x *bookerMoviesByTitleServer) Send(m *Movie) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func _Booker_MoviesByGenre_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(QueryParam)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+func _Booker_ListGenres_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NoParam)
+	if err := dec(in); err != nil {
+		return nil, err
 	}
-	return srv.(BookerServer).MoviesByGenre(m, &bookerMoviesByGenreServer{stream})
-}
-
-type Booker_MoviesByGenreServer interface {
-	Send(*Movie) error
-	grpc.ServerStream
-}
-
-type bookerMoviesByGenreServer struct {
-	grpc.ServerStream
-}
-
-func (x *bookerMoviesByGenreServer) Send(m *Movie) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func _Booker_MoviesByTime_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(QueryParam)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+	if interceptor == nil {
+		return srv.(BookerServer).ListGenres(ctx, in)
 	}
-	return srv.(BookerServer).MoviesByTime(m, &bookerMoviesByTimeServer{stream})
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/book.Booker/ListGenres",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BookerServer).ListGenres(ctx, req.(*NoParam))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-type Booker_MoviesByTimeServer interface {
-	Send(*Movie) error
-	grpc.ServerStream
+func _Booker_ListShowTimes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NoParam)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BookerServer).ListShowTimes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/book.Booker/ListShowTimes",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BookerServer).ListShowTimes(ctx, req.(*NoParam))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-type bookerMoviesByTimeServer struct {
-	grpc.ServerStream
+func _Booker_MoviesByTitle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryParam)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BookerServer).MoviesByTitle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/book.Booker/MoviesByTitle",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BookerServer).MoviesByTitle(ctx, req.(*QueryParam))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-func (x *bookerMoviesByTimeServer) Send(m *Movie) error {
-	return x.ServerStream.SendMsg(m)
+func _Booker_MoviesByGenre_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryParam)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BookerServer).MoviesByGenre(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/book.Booker/MoviesByGenre",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BookerServer).MoviesByGenre(ctx, req.(*QueryParam))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Booker_MoviesByTime_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryParam)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BookerServer).MoviesByTime(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/book.Booker/MoviesByTime",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BookerServer).MoviesByTime(ctx, req.(*QueryParam))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Booker_BuyTicket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -440,41 +284,34 @@ var Booker_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*BookerServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "ListMovie",
+			Handler:    _Booker_ListMovie_Handler,
+		},
+		{
+			MethodName: "ListGenres",
+			Handler:    _Booker_ListGenres_Handler,
+		},
+		{
+			MethodName: "ListShowTimes",
+			Handler:    _Booker_ListShowTimes_Handler,
+		},
+		{
+			MethodName: "MoviesByTitle",
+			Handler:    _Booker_MoviesByTitle_Handler,
+		},
+		{
+			MethodName: "MoviesByGenre",
+			Handler:    _Booker_MoviesByGenre_Handler,
+		},
+		{
+			MethodName: "MoviesByTime",
+			Handler:    _Booker_MoviesByTime_Handler,
+		},
+		{
 			MethodName: "BuyTicket",
 			Handler:    _Booker_BuyTicket_Handler,
 		},
 	},
-	Streams: []grpc.StreamDesc{
-		{
-			StreamName:    "ListMovie",
-			Handler:       _Booker_ListMovie_Handler,
-			ServerStreams: true,
-		},
-		{
-			StreamName:    "ListGenres",
-			Handler:       _Booker_ListGenres_Handler,
-			ServerStreams: true,
-		},
-		{
-			StreamName:    "ListShowTimes",
-			Handler:       _Booker_ListShowTimes_Handler,
-			ServerStreams: true,
-		},
-		{
-			StreamName:    "MoviesByTitle",
-			Handler:       _Booker_MoviesByTitle_Handler,
-			ServerStreams: true,
-		},
-		{
-			StreamName:    "MoviesByGenre",
-			Handler:       _Booker_MoviesByGenre_Handler,
-			ServerStreams: true,
-		},
-		{
-			StreamName:    "MoviesByTime",
-			Handler:       _Booker_MoviesByTime_Handler,
-			ServerStreams: true,
-		},
-	},
+	Streams:  []grpc.StreamDesc{},
 	Metadata: "book/book.proto",
 }

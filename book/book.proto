@@ -5,23 +5,23 @@ option go_package = "movie-ticket-booking/book";
 package book;
 
 service Booker {
-	rpc ListMovie(NoParam) returns (stream Options) {}
-	rpc ListGenres(NoParam) returns (stream Options) {}
-	rpc ListShowTimes(NoParam) returns (stream Options) {}
-	rpc MoviesByTitle(QueryParam) returns (stream Movie) {}
-	rpc MoviesByGenre(QueryParam) returns (stream Movie) {}
-	rpc MoviesByTime(QueryParam) returns (stream Movie) {}
+	rpc ListMovie(NoParam) returns (Options) {}
+	rpc ListGenres(NoParam) returns (Options) {}
+	rpc ListShowTimes(NoParam) returns (Options) {}
+	rpc MoviesByTitle(QueryParam) returns (Movies) {}
+	rpc MoviesByGenre(QueryParam) returns (Movies) {}
+	rpc MoviesByTime(QueryParam) returns (Movies) {}
 	rpc BuyTicket(BuyRequest) returns (NoParam) {}
 }
 
 message NoParam {}
 
 message Options {
-	string option = 2;
+	repeated string list = 2;
 }
 
 message QueryParam {
-	string param = 1;
+	string content = 1;
 }
 
 message Movie {
@@ -30,7 +30,12 @@ message Movie {
 	int64 year = 3;
 	string showTime = 4;
 	int64 room = 5;
-	int64 ticketsLeft = 6;
+	string class = 6;
+	int64 ticketsLeft = 7;
+}
+
+message Movies {
+	repeated Movie movie = 1;
 }
 
 message BuyRequest {
